@@ -29,7 +29,7 @@ const jsx = (
     <h1>这是一个标题</h1>
     <a href="www.baidu.com">点我呀</a>
     <FunctionComponent name="函数组件" />
-    <ClassComponent name="类组件" />
+    {/* <ClassComponent name="类组件" /> */}
   </div>
 );
 
