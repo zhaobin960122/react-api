@@ -1,7 +1,7 @@
 /** work in progress 正在工作的节点 */
 let wipRoot = null;
 /**
- * 根据虚拟dom将vnode转化为真实dom加载到容器上
+ * 渲染，构造fiber
  * @param {*} vnode 虚拟dom
  * @param {*} container 容器
  */
@@ -32,20 +32,19 @@ function createNode(workInProgress) {
   return node;
 }
 /**
- * 将类组件的vnode转化为node
- * @param {*} vnode
+ * 构造类组件fiber
+ * @param {*} workInProgress
  * @returns
  */
-function updateClassComponent(vnode) {
-  const { type, props } = vnode;
+function updateClassComponent(workInProgress) {
+  const { type, props } = workInProgress;
   const instance = new type(props);
-  const vvnode = instance.render();
-  const node = createNode(vvnode);
-  return node;
+  const children = instance.render();
+  reconcileChildren(workInProgress, children);
 }
 /**
- * 将函数组件的vnode转化为node
- * @param {*} vnode
+ * 构造函数组件fiber
+ * @param {*} workInProgress
  * @returns
  */
 function updateFunctionComponent(workInProgress) {
@@ -147,8 +146,8 @@ function performUnitOfWork(workInProgress) {
   }
   let nextFiber = workInProgress;
   while (nextFiber) {
-    if (workInProgress.sibling) {
-      return workInProgress.sibling;
+    if (nextFiber.sibling) {
+      return nextFiber.sibling;
     }
     nextFiber = nextFiber.return;
   }
