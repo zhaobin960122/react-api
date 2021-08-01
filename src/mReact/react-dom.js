@@ -84,7 +84,7 @@ function updateNode(node, nextVal) {
     });
 }
 /**
- * 将文本节点的vnode转化为node
+ * 构造文本节点fiber
  * @param {*} workInProgress
  * @returns
  */
@@ -152,7 +152,10 @@ function performUnitOfWork(workInProgress) {
     nextFiber = nextFiber.return;
   }
 }
-
+/**
+ * 事件循环
+ * @param {*} IdleDeadline
+ */
 function workLoop(IdleDeadline) {
   while (nextUnitOfWork && IdleDeadline.timeRemaining() > 1) {
     // 执行任务并返回下一个任务
@@ -163,12 +166,18 @@ function workLoop(IdleDeadline) {
   }
 }
 requestIdleCallback(workLoop);
-
+/**
+ * 提交更新
+ */
 function commitRoot() {
   commitWork(wipRoot.child);
   wipRoot = null;
 }
-
+/**
+ * 提交工作
+ * @param {*} workInProgress
+ * @returns
+ */
 function commitWork(workInProgress) {
   // 提交自己
   if (!workInProgress) {
